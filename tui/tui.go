@@ -2,6 +2,8 @@ package tui
 
 import (
 	"github.com/pterm/pterm"
+	cpuinfo "github.com/shirou/gopsutil/v3/cpu"
+	hostinfo "github.com/shirou/gopsutil/v3/host"
 	"math"
 )
 
@@ -19,4 +21,22 @@ func ShowBar(title string, runLength float64) (*pterm.ProgressbarPrinter, error)
 
 func ShowScore(text string, score float64) {
 	pterm.DefaultCenter.Println(pterm.NewRGB(15, 199, 209).Sprint(text, math.Round(score)))
+}
+
+func ShowOSInfo() error {
+	platform, family, version, err := hostinfo.PlatformInformation()
+	if err != nil {
+		return err
+	}
+	pterm.DefaultCenter.Println(pterm.NewRGB(15, 199, 209).Sprint(platform + " " + family + " " + version))
+	return nil
+}
+
+func ShowCPUInfo() error {
+	info, err := cpuinfo.Info()
+	if err != nil {
+		return err
+	}
+	pterm.DefaultCenter.Println(pterm.NewRGB(15, 199, 209).Sprint(info[0].ModelName))
+	return nil
 }

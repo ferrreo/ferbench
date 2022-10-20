@@ -9,8 +9,6 @@ import (
 	"runtime"
 )
 
-// env GOOS=windows GOARCH=amd64 go build
-// env GOOS=linux GOARCH=amd64 go build -ldflags="-s -w"
 func main() {
 	runLength := 30.0
 	numThreads := runtime.NumCPU()
@@ -72,6 +70,14 @@ func main() {
 		},
 		Before: func(ctx *cli.Context) error {
 			tui.ShowMainHeader()
+			err := tui.ShowOSInfo()
+			if err != nil {
+				return err
+			}
+			err = tui.ShowCPUInfo()
+			if err != nil {
+				return err
+			}
 			return nil
 		},
 	}

@@ -3,6 +3,7 @@ module ferbench
 go 1.19
 
 require (
+	github.com/acobaugh/osrelease v0.1.0
 	github.com/pterm/pterm v0.12.49
 	github.com/shirou/gopsutil/v3 v3.22.9
 	github.com/urfave/cli/v2 v2.20.2

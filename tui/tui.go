@@ -1,10 +1,12 @@
 package tui
 
 import (
+	osRelease "github.com/acobaugh/osrelease"
 	"github.com/pterm/pterm"
 	cpuinfo "github.com/shirou/gopsutil/v3/cpu"
 	hostinfo "github.com/shirou/gopsutil/v3/host"
 	"math"
+	"runtime"
 )
 
 func ShowMainHeader() {
@@ -24,11 +26,20 @@ func ShowScore(text string, score float64) {
 }
 
 func ShowOSInfo() error {
-	platform, family, version, err := hostinfo.PlatformInformation()
+	if runtime.GOOS != "linux" {
+		platform, family, version, err := hostinfo.PlatformInformation()
+		if err != nil {
+			return err
+		}
+		pterm.DefaultCenter.Println(pterm.NewRGB(15, 199, 209).Sprint(platform + " " + family + " " + version))
+		return nil
+	}
+
+	osrelease, err := osRelease.Read()
 	if err != nil {
 		return err
 	}
-	pterm.DefaultCenter.Println(pterm.NewRGB(15, 199, 209).Sprint(platform + " " + family + " " + version))
+	pterm.DefaultCenter.Println(pterm.NewRGB(15, 199, 209).Sprint(osrelease["PRETTY_NAME"]))
 	return nil
 }
 
